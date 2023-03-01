@@ -1,0 +1,64 @@
+name: Terraform Apply
+
+on:
+  push:
+    branches:
+      - main
+
+permissions: write-all
+
+jobs:
+  terraform_apply:
+    runs-on: ubuntu-latest
+    name: Terraform Apply
+    defaults:
+      run:
+        working-directory: terraform
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Checkout tfmake
+      uses: actions/checkout@v3
+      with:
+        repository: tfmake/tfmake
+        path: terraform/tfmake
+
+    - name: Install tfmake
+      run: |
+        sudo cp -r tfmake/usr/* /usr/
+        sudo chmod +x /usr/local/bin/tfmake
+
+    - name: Get all changed files
+      id: changed_files
+      uses: tj-actions/changed-files@v35
+      with:
+        path: terraform
+        diff_relative: true
+        files: |
+          **/*.tf
+          **/*.tfvars
+
+    - run: tfmake setup
+
+    - run: tfmake init
+
+    - name: Run tfmake touch
+      run: tfmake touch "${FILES}"
+      env:
+        FILES: ${{ steps.changed_files.outputs.all_changed_files }}
+
+    - run: tfmake makefile --apply
+
+    - run: tfmake apply
+      continue-on-error: true
+
+    - run: tfmake mermaid --apply
+      env:
+        CLASS_DEF_DEFAULT: ${{ vars.CLASS_DEF_DEFAULT }}
+        CLASS_DEF_VISITED: ${{ vars.CLASS_DEF_VISITED }}
+
+    - run: tfmake summary --apply
+
+    - run: tfmake gh-step-summary --apply
