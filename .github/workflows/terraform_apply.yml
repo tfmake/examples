@@ -42,7 +42,7 @@ jobs:
 
     - run: tfmake setup
 
-    - run: tfmake init
+    - run: tfmake init --apply
 
     - name: Run tfmake touch
       run: tfmake touch "${FILES}"
