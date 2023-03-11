@@ -62,7 +62,7 @@ jobs:
 
     - run: tfmake summary --plan
       env:
-      SUMMARY_TITLE: Terraform Plan for Basic project
+        SUMMARY_TITLE: Terraform Plan for Basic project
 
     - run: tfmake gh-step-summary --plan
 
