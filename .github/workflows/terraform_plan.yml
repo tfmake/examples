@@ -61,6 +61,8 @@ jobs:
         CLASS_DEF_VISITED: ${{ vars.CLASS_DEF_VISITED }}
 
     - run: tfmake summary --plan
+      env:
+      SUMMARY_TITLE: Terraform Plan for Basic project
 
     - run: tfmake gh-step-summary --plan
 
@@ -69,4 +71,3 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         NUMBER: ${{ github.event.pull_request.number }}
-        SUMMARY_TITLE: Terraform Plan for Basic project
