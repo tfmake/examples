@@ -63,11 +63,10 @@ jobs:
     - run: tfmake summary --plan
 
     - run: tfmake gh-step-summary --plan
-      env:
-        SUMMARY_TITLE: Terraform Plan for Basic project
 
     - name: Run tfmake gh-pr-comment --plan
       run: tfmake gh-pr-comment --plan ${NUMBER}
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         NUMBER: ${{ github.event.pull_request.number }}
+        SUMMARY_TITLE: Terraform Plan for Basic project
