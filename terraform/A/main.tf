@@ -1,12 +1,3 @@
-locals {
-  content = "A module"  
-}
-
-resource "local_file" "file" {
-  content  = local.content
-  filename = "${path.module}/out.txt"
-}
-
 resource "random_id" "id" {
   keepers = {
     content = local.content
