@@ -29,6 +29,7 @@ jobs:
       run: |
         sudo cp -r tfmake/usr/* /usr/
         sudo chmod +x /usr/local/bin/tfmake
+        rm -rf tfmake
 
     - name: Get all changed files
       id: changed_files
@@ -62,6 +63,8 @@ jobs:
     - run: tfmake summary --plan
 
     - run: tfmake gh-step-summary --plan
+      env:
+        SUMMARY_TITLE: Terraform Plan for Basic project
 
     - name: Run tfmake gh-pr-comment --plan
       run: tfmake gh-pr-comment --plan ${NUMBER}
